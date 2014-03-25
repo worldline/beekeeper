@@ -1,0 +1,72 @@
+body {
+  background: url("./images/bg.png") repeat scroll 0 0%, none, repeat scroll 0 0 #101010;
+  color: #ffffff;
+}
+
+* {
+  font-family: 'Droid Sans', sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  text-rendering: optimizelegibility;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #FFFFFF;
+}
+
+#header {
+  border-bottom: 1px solid #474747;
+  height: 3em;
+  padding: 0.5em 1em 0.25em;
+  background-color: #000000;
+  background-image: -moz-linear-gradient(center top , #424242 0px, #1C1C1C 100%);
+}
+
+#header h1 {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+#page {
+  width:80%;
+  margin: 1em auto;
+  padding: 1em;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #101010;
+  line-height: 1.5em;
+  height: 100%;
+}
+#page h2 {
+  font-size: 1.5em;
+  margin-top: 1em;
+}
+
+img.sample {
+  width: 80%;
+  margin: auto;
+}
+
+#footer {
+  border-top: 1px solid #474747;
+  bottom: 0;
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5);
+  height: 1em;
+  padding: 0.5em 1em 1em;
+  left: 0;
+  right: 0;
+  font-size: 9pt;
+  background-color: rgba(0, 0, 0, 0);
+  background-image: -moz-linear-gradient(center top , #424242 0px, #1C1C1C 100%);
+}
+#footer a, #footer span, #footer span a {
+  font-size: 9pt;
+}
+
+#fork {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
