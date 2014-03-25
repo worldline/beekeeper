@@ -1,0 +1,12 @@
+[{
+  "values":[65536, 3112960, 105006 ],
+  "dstypes":[ "gauge", "gauge", "gauge"],
+  "dsnames":[ "unit", "size", "used"],
+  "time": 1351245439000,
+  "interval": 10,
+  "host": "datagrid02",
+  "plugin": "snmp",
+  "plugin_instance": "",
+  "type": "fs_usage",
+  "type_instance": "_mnt"
+}]

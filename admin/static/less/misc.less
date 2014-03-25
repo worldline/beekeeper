@@ -1,0 +1,31 @@
+/* --------------
+Misc
+---------------*/
+
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 10pt;
+  font-weight: normal;
+  font-family: 'Droid Sans', sans-serif;
+}
+
+body {
+  background: url('../png/bg.png'), @bg-dark;
+  color: @text-dark;
+  overflow: hidden;
+}
+
+[class^="icon-"]::before, [class*=" icon-"]::before {
+  font-size: 19px;
+  vertical-align: middle;
+  line-height: inherit;
+}
+
+.glow-icon {
+  &[class^="icon-"]:hover::before, &[class*=" icon-"]:hover::before {
+    color: #333;
+    text-shadow: 0 0 0.2em white;
+  }
+}
+

@@ -1,0 +1,30 @@
+{
+  "author": "Worldline",
+  "name": "beekeeper-admin-static",
+  "description": "Frontend static files.",
+  "version": "1.0.0",
+  "private": true,
+  "bin": "bin/beekeeper-static",
+  "dependencies": {
+    "express": "~3.4.7",
+    "http-proxy": "~0.10.3",
+    "requirejs": "~2.1.9",
+    "less-middleware": "~0.1.12",
+    "memory-cache": "0.0.5"
+  },
+  "devDependencies": {
+    "bower": "~1.2.7",
+    "csso": "^1.3.11",
+    "less": "^1.6.3"
+  },
+  "optionalDependencies": {},
+  "scripts": {
+    "start": "../../node_modules/.bin/pm2 start beekeeper-static-pm2.json",
+    "stop": "../../node_modules/.bin/pm2 stop beekeeper-static",
+    "build": "./app.build.js",
+    "postinstall": "( [ \"$NODE_ENV\" = 'production' ] || [ \"$NODE_ENV\" = 'qualification' ] || [ \"$NODE_ENV\" = 'openshift' ] && npm run-script build) || /bin/true"
+  },
+  "engines": {
+    "node": "~0.10"
+  }
+}

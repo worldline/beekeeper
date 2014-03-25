@@ -1,0 +1,14 @@
+{
+  "name": "jquery-caret",
+  "homepage": "https://github.com/DrPheltRight/jquery-caret",
+  "_release": "20803a7a16",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "20803a7a164a147ea513c68fd7aadbcf884100f8"
+  },
+  "_source": "https://github.com/DrPheltRight/jquery-caret.git",
+  "_target": "*",
+  "_originalSource": "jquery-caret",
+  "_direct": true
+}

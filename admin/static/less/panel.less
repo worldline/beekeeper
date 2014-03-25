@@ -1,0 +1,122 @@
+/* --------------
+Panel
+---------------*/
+.handle-gradient(@handle, @gradient) {
+  background: @handle, -moz-linear-gradient(@gradient);
+  background: @handle, -webkit-linear-gradient(@gradient);
+  background: @handle, -o-linear-gradient(@gradient);
+  background: @handle, -ms-linear-gradient(@gradient);
+  background: @handle, linear-gradient(@gradient);
+}
+
+.handle-nogradient(@handle) {
+  background: @handle;
+}
+
+.panel {
+  @handle-left: url('../png/handler.png') center right no-repeat;
+  @handle-right: url('../png/handlel.png') center left no-repeat;
+  @gradient-left: left, @handle-color, @handle-color @handle-hover, transparent @handle-hover+0.1px, transparent;
+  @gradient-right: left, transparent, transparent @handle-visible, @handle-color @handle-visible+0.1px, @handle-color;
+  @handle-visible: 10px;
+  @handle-hover: 3px;
+  @handle-color: @dark;
+  @slide-time: 1s;
+  z-index: 2;
+  .translate3d(0, 0, 0);
+
+  position: absolute;
+  top: 0;
+  .box-sizing(border-box);
+  height: 100%;
+  width: 0;
+
+  .container {
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    border-top: 1px solid @border;
+    background: rgba(240, 240, 240, 1);
+    overflow: hidden;
+
+    .content {
+      color: rgba(0, 0, 0, 0.5);
+      height: 100%;
+    }
+  }
+  &.pleft {
+    right: 100%;
+    .transition(right @slide-time e(",") width @slide-time step-end);
+    .handle {
+      .handle-nogradient(@handle-left);
+      right: -@handle-visible;
+      &:hover {
+        .handle-gradient(@handle-left, @gradient-left);
+        right: -(@handle-visible + @handle-hover);
+      }
+    }
+  }
+  &.pright {
+    left: 100%;
+    .transition(left @slide-time e(",") width @slide-time step-end);
+    .handle {
+      .handle-nogradient(@handle-right);
+      left: -@handle-visible;
+      &:hover {
+        .handle-gradient(@handle-right, @gradient-right);
+        left: -(@handle-visible + @handle-hover);
+      }
+    }
+  }
+  &.active {
+    width: 100%;
+    margin: 0;
+    z-index: 10;
+    &.pleft {
+      .transition(right @slide-time e(",") width @slide-time step-start);
+      right: 0;
+      .handle {
+        right: 0;
+        .handle-nogradient(@handle-right);
+        &:hover {
+          .handle-gradient(@handle-right, @gradient-right);
+        }
+      }
+    }
+    &.pright {
+      .transition(left @slide-time e(",") width @slide-time step-start);
+      left: 0;
+      .handle {
+        left: 0;
+        .handle-nogradient(@handle-left);
+        &:hover {
+          .handle-gradient(@handle-left, @gradient-left);
+        }
+      }
+    }
+  }
+  .handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-top:auto;
+    margin-bottom:auto;
+    z-index: 3;
+    width: @handle-visible;
+    height: 207px;
+
+    &:hover {
+      width: @handle-visible + @handle-hover;
+    }
+
+    > a {
+      display: block;
+      border: none;
+      margin: 0;
+      padding: 0;
+      width: 50%;
+      height: 100%;
+    }
+  }
+}

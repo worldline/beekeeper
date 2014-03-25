@@ -1,0 +1,12 @@
+{
+  "values": [ 0, 0 ],
+  "dstypes": [ "counter", "counter" ],
+  "dsnames": [ "rx", "tx" ],
+  "time": 1347279053000,
+  "interval": 10,
+  "host": "l40077",
+  "plugin": "interface",
+  "plugin_instance": "",
+  "type": "if_octets",
+  "type_instance": "wlan0"
+}

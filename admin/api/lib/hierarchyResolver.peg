@@ -1,0 +1,354 @@
+start =  _ q:( metric / event) _  {return q;}//{console.log('query:',q.explode([1,2,3,4], [11,12,13])) ; return q}
+
+/*
+cpu(free|user).childOf([[{id:'a15e2e35e1e'}, {id:'74f57ff4s5s'}]]).gt(free,0)
+*/
+event = taf:type_and_filters {
+  return {
+    string:  taf.string,
+    exprs:   taf.expr,
+    explode: taf.explode
+  }
+}
+
+
+/*
+sum(cpu(free).childOf([[{id:'a15e2e35e1e'}, {id:'74f57ff4s5s'}],
+[{id:'aa4745475'}]])
+.gt(free,10)) / sum(cpu(free|user).childOf( [[{id:'aa4745475'}]])) * 100
+*/
+metric =
+  m: metric_expression
+    o: operator
+    s: metric {
+      return {
+        string: m.string + o + s.string,
+        exprs: (m.expr || [] ).concat(s.exprs || []),
+        explode: function metricExplode() {
+          return (typeof m.explode === "function" ? m.explode.apply(this,arguments) : m) + o +
+            (typeof s.explode === "function" ? s.explode.apply(this,arguments) : s);
+        }
+      };
+    }
+  / m:metric_expression
+
+/*
+  10
+  1+1
+  (1024*1024)
+  -1
+*/
+literal_math_expression =
+  left: literal_math_primary o:operator right: literal_math_expression {
+    var str = ''+Function( "return "+ left.string + o + right.string )()
+    return {
+      string: str,
+      exprs: [],
+      explode: function explodeIdentity(){return str}
+    }
+  }
+  / left: literal_math_primary _ o:operator _ right: literal_math_primary {
+    var str = ''+Function( "return "+ left.string + o + right.string )()
+    return {
+      string: str,
+      exprs: [],
+      explode: function explodeIdentity(){return str}
+    }
+  }
+  / l:literal_math_primary
+  / l: "(" _ l:literal_math_primary _ ")" { return l }
+
+literal_math_primary =
+  minus:( "-" _ )* "(" _ e:literal_math_expression _ ")" {
+      var str = ''+Function( "return "+ (minus.length%2? '-' : '') + "("+e.string+")" )()
+      return {
+        string: str,
+        exprs: e.exprs,
+        explode: function explodeIdentityParen(){return str;}
+      }
+    }
+  / minus:( "-" _)* head:number _ tail:(o:operator _ l:number _ {return o+l})* {
+    var str = ''+Function( "return "+ (minus.length%2? '-' : '') + head + tail.join('') )()
+    return {
+      string: str,
+      exprs: [],
+      explode: function explodeIdentity(){return str}
+    }
+  }
+
+metric_expression =
+  m:metric_primary
+  / "(" m:metric_primary ")" {
+    return {
+      string : "("+ m.string +")",
+      expr   : m.expr,
+      explode: function exploseParen() {return "("+m.explode.call(this, arguments)+")"}
+    }
+  }
+
+/*
+  1
+  1+avg(memory(free))/100
+*/
+metric_primary =
+  head:(
+      _ l:literal_math_expression _ o:operator _ {
+        return {
+          string:  l.string + o,
+          exprs:   l.exprs,
+          explode: function explodeOperatorExpression() {
+            return l.explode.apply(this, arguments) + o
+          }
+        }
+      }
+    / _
+    ) reducer:reducer _  tail:(
+        o:operator _ s:metric {
+    //console.log('metric expr tail start', s)
+          return {
+            string:  o+s.string,
+            exprs:   s.exprs,
+            explode: function explodeOperatorExpression() {
+    //console.log('>>explodeOperatorExpression', arguments, o, s)
+              return o + s.explode.apply(this, arguments)
+            }
+          }
+        }
+      / o:operator _ l:literal {return o+l}
+      / _
+    ) _ {
+//console.log('head:',head, 'reducer',reducer, 'tail:',tail);
+
+      return {
+        string: (head.string || head) + reducer.string + (tail.string || tail),
+
+        exprs: (reducer.expr || [] ).concat(tail.exprs || []),
+
+        explode : function proxyToExploders() {
+
+          var args = Array.apply(this, arguments);
+
+          var first = args.splice(0, reducer.expr.length) // now args only keeps the rest
+    //console.log('>>proxyToExploders', arguments , reducer.expr.length, first, args, tail, tail.explode)
+          return (typeof head.explode === "function" ? head.explode.apply(this,args) : head) +
+                 reducer.explode.apply(this, first) +
+                 (typeof tail.explode === "function" ? tail.explode.apply(this,args) : tail);
+          }
+        }
+      }
+  / l:literal_math_expression {return l}
+
+type_and_filters = t:type _ p:(f:filter _ {return {string:f};} / s:selection _ {return s})* {
+  var exprs = [];
+  p = p.sort();
+  return {
+    string : t + p.map(function(e){
+        if(e.expr) {
+          exprs.push(e.expr);
+        }
+        return e.string;
+      }).join(''),
+
+    expr: exprs,
+
+    explode : function explodeTypeAndFilters() {
+      //console.log('>>explodeReducer',  p)
+      var args = arguments;
+      var i = -1; /*counts exploder to match the good argument*/
+
+      var result =  t + p.map(function(filterOrSelection) {
+      if(filterOrSelection.explode) {
+      //console.log('selection', filterOrSelection.string, '->', filterOrSelection.explode(args[i+1]))
+
+        return filterOrSelection.explode(args[++i])
+      }
+      //console.log('filter', filterOrSelection.string)
+      return filterOrSelection.string;
+      }).join('');
+      //console.log('reducer result', result)
+      return result;
+    }
+  }
+}
+
+
+reducer
+  = r:reducer_expression
+  / "(" _ r:reducer_expression _ ")"
+  {
+    return {
+      string : "("+ r.string +")",
+      expr   : r.expr,
+      explode: function exploseParen() {return "("+r.explode.call(this, arguments)+")"}
+    }
+  }
+
+reducer_expression = id:identifier _ "(" _ tafs:type_and_filters _ ")" group:(_ "." _ "group" _ "(" _ ig:ignore _ ")" {return ".group(" +ig+")"})? {
+ return {
+  string: id + "(" +  tafs.string + ")" + group,
+
+  expr: tafs.expr,
+
+  explode : function explodeReducer() {
+   return id + "(" + tafs.explode.apply(this, arguments) +")" + group
+  }
+ }
+}
+
+
+selection = ".childOf" _ "(" _ a:array_literal _ ")" {
+//console.log('selection array', a)
+ return {
+  expr: a,
+  string:".childOf" + "(" + JSON.stringify(a) + ")",
+  explode: function explodeSelection (explodedExpr) {
+//console.log('>>explodeSelection', arguments)
+   return ".in(host," + JSON.stringify(explodedExpr) + ")"
+  }
+ }
+}
+
+type = id:identifier _ right:("(" _ ig:ignore _ ")" {return "(" +ig+")"}) {return id+right}
+
+identifier_with_dots = head:identifier tail:("." id:identifier {return "."+id})* {
+  return head + tail.join('')
+}
+
+
+filter = !selection "." id:identifier _ "(" ig:ignore opt:("," _ ig:ignore)* ")" {
+ return "." + id + "(" + ig + opt.map(function(d){ return ","+d[2];}) + ")"
+}
+
+ignore = i:( any:(identifier / literal_string / operator / "|" / "," / ".") _ {return any})* {
+//console.log(arguments);
+  return i.join('')
+}
+
+literal_string = l:literal {
+  return JSON.stringify(l);
+}
+
+object_literal = "{" _ first:key_value rest:(_ "," _ kv:key_value {return kv; })*_ "}" _ {
+  var obj = {};
+  obj[first.key] = first.value;
+  rest.forEach(function(d) { return obj[d.key]=d.value });
+  return obj;
+}
+
+key_value = _ k:key _ ":" _ v:literal _ {return {key:k, value:v}}
+
+key = identifier / string_identifier
+
+identifier = first:[a-zA-Z_] rest:[a-zA-Z0-9_$]* {
+ return first + rest.join("");
+}
+
+/*we do not allow what can be a special case in a mongodb request*/
+string_identifier = s:string !{
+  if (reportFailures === 0) {
+    matchFailed("some identifier not starting with $");
+  }
+  return s[0]==='$';
+} {return s;}
+
+
+operator = "+" / "-" / "/" / "*"
+
+literal
+  = array_literal
+  / object_literal
+  / string
+  / number
+  / "true"      { return true; }
+  / "false"     { return false; }
+  / "undefined" { return undefined; }
+  / "NaN"       { return NaN; }
+  / "null"      { return null; }
+
+
+array_literal
+  = "[" _ first:literal rest:(_ "," _ literal)* _ "]" {
+ return [first].concat(rest.map(function(d) { return d[3]; }));
+}
+  / "[" _ "]" { var a = []; a.string = "[]" ; return a;}
+
+string "string"
+  = '"' chars:double_string_char* '"' { return chars.join(""); }
+  / "'" chars:single_string_char* "'" { return chars.join(""); }
+
+double_string_char
+  = !('"' / "\\") char_:. { return char_; }
+  / "\\" sequence:escape_sequence { return sequence; }
+
+single_string_char
+  = !("'" / "\\") char_:. { return char_; }
+  / "\\" sequence:escape_sequence { return sequence; }
+
+escape_sequence
+  = character_escape_sequence
+  / "0" !digit { return "\0"; }
+  / hex_escape_sequence
+  / unicode_escape_sequence
+
+character_escape_sequence
+  = single_escape_character
+  / non_escape_character
+
+single_escape_character
+  = char_:['"\\bfnrtv] { return char_.replace("b", "\b").replace("f", "\f").replace("n", "\n").replace("r", "\r").replace("t", "\t").replace("v", "\x0B"); }
+
+non_escape_character
+  = !escape_character char_:. { return char_; }
+
+escape_character
+  = single_escape_character
+  / digit
+  / "x"
+  / "u"
+
+hex_escape_sequence
+  = "x" h1:hex_digit h2:hex_digit { return String.fromCharCode(+("0x" + h1 + h2)); }
+
+unicode_escape_sequence
+  = "u" h1:hex_digit h2:hex_digit h3:hex_digit h4:hex_digit { return String.fromCharCode(+("0x" + h1 + h2 + h3 + h4)); }
+
+/*we don't need this part, because we do not support numbers*/
+
+number "number"
+  = "-" _ number:number { return -number; }
+  / int_:int frac:frac exp:exp { return +(int_ + frac + exp); }
+  / int_:int frac:frac { return +(int_ + frac); }
+  / int_:int exp:exp { return +(int_ + exp); }
+  / frac:frac { return +frac; }
+  / int_:int { return +int_; }
+
+int
+  = digit19:digit19 digits:digits { return digit19 + digits; }
+  / digit:digit
+
+frac
+  = "." digits:digits { return "." + digits; }
+
+exp
+  = e:e digits:digits { return e + digits; }
+
+digits
+  = digits:digit+ { return digits.join(""); }
+
+e
+  = e:[eE] sign:[+-]? { return e + sign; }
+
+digit19
+  = [1-9]
+
+digit
+  = [0-9]
+
+hex_digit
+  = [0-9a-fA-F]
+
+_ "whitespace"
+  = whitespace*
+
+whitespace
+  = [ \t\n\r]

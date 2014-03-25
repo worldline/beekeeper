@@ -1,0 +1,5 @@
+{
+  "script": "bin/beekeeper-admin.js",
+  "name": "beekeeper-admin",
+  "instances": "1"
+}

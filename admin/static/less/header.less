@@ -1,0 +1,183 @@
+/* --------------
+Header
+---------------*/
+
+header {
+  &:extend(.bk-gradient-black-to-transparent);
+  width: 100%;
+  position: relative;
+  z-index: 1;
+
+  .header-upperbar {
+    &:extend(.bk-gradient-grey-to-greyer);
+    padding: 1em 1em;
+    border-bottom: 1px solid @border;
+    height: 1em;
+
+    h1 {
+        float: left;
+        font-weight: bold;
+    }
+
+    .login {
+      @offset: 5px;
+
+      color: white;
+      float: right;
+      margin-top: -@offset + -1px;
+      border: 1px solid @border;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      .box-shadow(0px 0px 1px 1px rgba(0, 0, 0, 0.5));
+
+      cursor : default;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.35);
+        position: relative;
+        border-left-width: 0px;
+        color: @gray-dark;
+      }
+
+      > a {
+        color: inherit;
+        padding: @offset 1em;
+        margin-left: 1px;
+        &[class^="icon-"]::before, &[class*=" icon-"]::before {
+          margin-right: 10px;
+          font-size: 14px;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  .header-lowerbar {
+    nav {
+      display: inline;
+      .icon:before {
+        margin:0;
+      }
+      .dropdown-menu {
+        left:-10px;
+        top:110%;
+      }
+      .nav-tabs>li>a {
+        text-decoration: none;
+        color: white;
+      }
+    }
+
+    input {
+      border: 1px solid @border;
+      background-color: fade(@grad-dark1, 50%);
+      color: white;
+    }
+
+    .nav-toolbar {
+      float: left;
+      display: inline;
+
+      > li {
+        display: inline-block;
+
+        border: 1px solid @border;
+        border-radius: 2px;
+        .box-shadow(0px 0px 1px 1px rgba(0, 0, 0, 0.5));
+
+        background: @grad-dark2;
+
+        margin: @margin;
+        margin-right: 0;
+
+        width: @box-size;
+        height: @box-size;
+
+        &:hover {
+          background: @color-hov;
+        }
+
+        .background-div {
+          @icon-size: 20px;
+          margin: (@box-size - @icon-size)/2;
+
+          width: @icon-size;
+          height: @icon-size;
+        }
+      }
+    }
+
+    .nav-tabs {
+      display: inline;
+
+      .colorize-tab(@color, @faded: 100%) {
+        @shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.25), -1px 1px 1px 0px rgba(0, 0, 0, 0.25); /*, inset 0px -5px 0px -4px fade(@color, @faded)*/
+        .box-shadow(@shadow);
+        border-bottom-color: fade(@color, @faded);
+      }
+
+      > li {
+
+        position: relative;
+
+        display: inline-block;
+
+        border: 1px solid @border;
+        border-radius: 2px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+
+        &:nth-of-type(6n+1) { .colorize-tab(@color-tab-1, 30%); }
+        &:nth-of-type(6n+2) { .colorize-tab(@color-tab-2, 30%); }
+        &:nth-of-type(6n+3) { .colorize-tab(@color-tab-3, 30%); }
+        &:nth-of-type(6n+4) { .colorize-tab(@color-tab-4, 30%); }
+        &:nth-of-type(6n+5) { .colorize-tab(@color-tab-5, 30%); }
+        &:nth-of-type(6n+6) { .colorize-tab(@color-tab-6, 30%); }
+
+
+        background: @grad-dark2;
+
+        cursor:pointer;
+
+        vertical-align: top;
+
+        margin: @margin;
+        margin-top: -1px;
+        margin-right: 0;
+
+        @padding-size: 5px;
+        padding: @margin + @padding-size 0.4em 0;
+
+        height: @box-size + -@padding-size + 1px;
+
+        &:hover:not(.active) {
+          background: @color-hov;
+
+          &:nth-of-type(6n+1) { .colorize-tab(@color-tab-1); }
+          &:nth-of-type(6n+2) { .colorize-tab(@color-tab-2); }
+          &:nth-of-type(6n+3) { .colorize-tab(@color-tab-3); }
+          &:nth-of-type(6n+4) { .colorize-tab(@color-tab-4); }
+          &:nth-of-type(6n+5) { .colorize-tab(@color-tab-5); }
+          &:nth-of-type(6n+6) { .colorize-tab(@color-tab-6); }
+        }
+
+      }
+
+      > li.active {
+        border-top: 1px solid @grad-dark2;
+
+        &:nth-of-type(6n+1) { .colorize-tab(@color-tab-1); }
+        &:nth-of-type(6n+2) { .colorize-tab(@color-tab-2); }
+        &:nth-of-type(6n+3) { .colorize-tab(@color-tab-3); }
+        &:nth-of-type(6n+4) { .colorize-tab(@color-tab-4); }
+        &:nth-of-type(6n+5) { .colorize-tab(@color-tab-5); }
+        &:nth-of-type(6n+6) { .colorize-tab(@color-tab-6); }
+      }
+
+      .newDash > div {
+        margin-top: 4px;
+        margin-left: 1px;
+      }
+    }
+
+  }
+}

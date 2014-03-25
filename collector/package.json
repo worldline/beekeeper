@@ -1,0 +1,23 @@
+{
+  "author": "Worldline",
+  "name": "beekeeper-collector",
+  "description": "Server evaluating beekeeper formulas data.",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "cube": "git://github.com/Marsup/cube.git#full-merge",
+    "cfg": "0.0.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.15.1",
+    "should": "~2.1.1"
+  },
+  "scripts": {
+    "start": "../node_modules/.bin/pm2 start collector-pm2.json",
+    "stop": "../node_modules/.bin/pm2 stop collector",
+    "test": "NODE_ENV=test node_modules/mocha/bin/mocha --reporter spec"
+  },
+  "engines": {
+    "node": "~0.10.23"
+  }
+}

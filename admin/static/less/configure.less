@@ -1,0 +1,153 @@
+
+.configureScreen {
+
+  .top {
+
+    margin-bottom: 1em;
+  }
+
+  .preview {
+    .widgetTitle {
+      vertical-align: top;
+      position: absolute;
+      border: none;
+      color: @color-information;
+      background-color: white;
+      .inner-shadow(0 0 1em rgba(0,0,0,0.2) );
+      border: 1px solid @color-information;
+      padding: 1px 2px;
+      border-radius: none;
+      overflow: visible;
+      height: 16px;
+      width:206px;
+    }
+  }
+
+  .properties {
+    counter-reset: propertiesList;
+    margin: 1em 0;
+
+    li {
+      display: inline-block;
+      position: relative;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      padding: 5px 20px 5px 5px;
+      width: 170px;
+
+      overflow: hidden;
+      margin: 0 5px 5px 0;
+
+      input.name {
+        max-width: 130px;
+      }
+
+      input[name='width'] {
+        text-align: right;
+        //padding-right: 1em;
+      }
+
+      input {
+        max-width: 50px;
+        border: none;
+        background: white;
+        border: 1px solid @color-information;
+        color: @color-information;
+        .inner-shadow(0 0 1em rgba(0,0,0,0.2) );
+        padding: 2px;
+        margin: 2px;
+        outline: none;
+      }
+
+      &:after {
+        counter-increment: propertiesList;
+        content: counter(propertiesList);
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: -5px;
+        margin-right: -2px;
+        font-size: 20pt;
+        font-weight: 900;
+        color: rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+
+  .buttonBar {
+    margin-right: 100px;
+  }
+
+  .information {
+    color: @color-information;
+    input {
+      border-color: @color-information;
+
+    }
+
+    .preview {
+      display: inline-block;
+      padding-right: 10px;
+    }
+    .description {
+      vertical-align: top;
+      display: inline-block;
+      margin-left: 15px;
+      padding: 10px;
+      border: 1px solid grey;
+      width: 300px;
+      .box-shadow(5px 5px 20px grey);
+
+      &[class^="icon-"]::before, &[class*=" icon-"]::before {
+        float: left;
+        font-size: 36px;
+        padding-right: 15px;
+      }
+    }
+  }
+
+  .formula {
+    border: 1px solid grey;
+    padding: 10px;
+    margin-bottom: 20px;
+    margin-right: 100px;
+
+    label.description {
+      color: @grad-dark1;
+    }
+
+    .description {
+      color: rgb(40, 86, 145);
+      display: block;
+      padding-bottom: 4px;
+
+      &[class^="icon-"]::before, &[class*=" icon-"]::before {
+        vertical-align: middle;
+        padding-left: 2px;
+        padding-right: 2px;
+        color: @color-information;
+      }
+    }
+
+    textarea.tagged_text {
+      border-radius: 0;
+      background: white;
+      color: @color-information;
+      border: 1px solid @color-information;
+      .inner-shadow(0 0 1em rgba(0,0,0,0.2) );
+    }
+  }
+}
+
+.selectionDesc {
+    color: @grad-dark1;
+    margin-right: 100px;
+    margin-bottom: 25px;
+    padding: 10px;
+    border: 1px solid grey;
+    .box-shadow(2px 2px 8px grey);
+
+    &[class^="icon-info-sign"]::before, &[class*=" icon-info-sign"]::before {
+      padding-left: 2px;
+      padding-right: 4px;
+    }
+  }

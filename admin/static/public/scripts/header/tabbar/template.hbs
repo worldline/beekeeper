@@ -1,0 +1,23 @@
+<li class='dashboard {{active}}' id='{{dashboardID}}'>
+	<a href='#dashboard/{{order}}' data-editable>{{dashboardName}}</a>
+	{{#if active}}
+  <nav class="dropdown">
+    <a class="dropdown-toggle icon-cog" data-toggle="dropdown" title="Dashboard Settings" href="#"></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+      <li><a tabindex="-1" href="#" data-rename-dashboard class="icon-pencil">Rename</a></li>
+      <!--<li><a tabindex="-1" href="#" data-move-dashboard class="icon-move">Move</a></li>-->
+
+      <li class="divider"></li>
+      <li><a tabindex="-1" href="#" data-delete-dashboard class="icon-remove">Delete</a></li>
+
+      <!--<li class="divider"></li>
+      <li><a tabindex="-1" href="#" data-lock-dashboard class="icon-lock">Lock</a></li>-->
+
+      <li class="divider"></li>
+      <!--<li><a tabindex="-1" href="#" data-duplicate-dashboard class="icon-copy">Duplicate</a></li>-->
+      <li><a tabindex="-1" href="#" data-create-dashboard class="icon-plus-sign">New Dashboard</a></li>
+      <li><a tabindex="-1" href="#" data-create-widget class="icon-plus">Create a new widget</a></li>
+    </ul>
+  </nav>
+	{{/if}}
+</li>

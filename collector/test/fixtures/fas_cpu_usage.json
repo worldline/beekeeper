@@ -1,0 +1,12 @@
+{
+  "values": [12, 88],
+  "dstypes": ['gauge', 'gauge'],
+  "dsnames": ['busy', 'idle'],
+  "time": 1351244799000,
+  "interval": 10,
+  "host": 'datagrid02',
+  "plugin": 'snmp',
+  "plugin_instance": '',
+  "type": 'fas_cpu_usage',
+  "type_instance": ''
+}

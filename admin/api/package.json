@@ -1,0 +1,50 @@
+{
+  "author": "Worldline",
+  "name": "beekeeper-admin-api",
+  "description": "Server providing metrics to the front end.",
+  "version": "1.0.0",
+  "private": true,
+  "bin": "bin/beekeeper-admin",
+  "main": "lib/index",
+  "dependencies": {
+    "cfg": "0.0.2",
+    "express": "~3.4.7",
+    "express-namespace": "~0.1.1",
+    "passport": "~0.1.17",
+    "passport-local": "~0.1.6",
+    "connect-mongo": "~0.4.0",
+    "mongodb": "~1.3.22",
+    "mongoose": "~3.8.1",
+    "colors": "~0.6",
+    "socket.io": "~0.9.16",
+    "socket.io-client": "~0.9.16",
+    "ws": "~0.4.30",
+    "underscore": "~1.5.2",
+    "async": "~0.2.9",
+    "commander": "~2.1.0",
+    "fstream": "~0.1.24",
+    "lodash": "~2.4.1",
+    "moment": "~2.4.0",
+    "pegjs": "~0.7.0",
+    "passport.socketio": "~2.2.0"
+  },
+  "devDependencies": {
+    "cube": "git://github.com/Marsup/cube.git#full-merge",
+    "request": "~2.29.0",
+    "mocha": "~1.15.1",
+    "sandboxed-module": "~0.3.0",
+    "jshint": "~2.3.0",
+    "should": "~2.1.1",
+    "connect-fileupload-cleaner": "0.0.1",
+    "portfinder": "~0.2.1"
+  },
+  "engines": {
+    "node": "~0.10.23"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha --reporter spec",
+    "start": "../../node_modules/.bin/pm2 start beekeeper-admin-pm2.json",
+    "stop": "../../node_modules/.bin/pm2 stop beekeeper-admin",
+    "lint": "jshint --config .jshintrc bin init lib"
+  }
+}

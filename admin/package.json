@@ -1,0 +1,17 @@
+{
+  "author": "Worldline",
+  "name": "beekeeper-admin",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd api; npm i; cd ../static; npm i;",
+    "test": "cd api && npm test && cd ../static && npm test",
+    "start": "cd api; npm start; cd ../static; npm start; cd ..",
+    "stop": "cd api; npm stop; cd ../static; npm stop; cd .."
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "~0.10.23"
+  }
+}

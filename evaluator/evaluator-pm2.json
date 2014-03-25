@@ -1,0 +1,5 @@
+{
+  "script": "bin/evaluator.js",
+  "name": "evaluator",
+  "instances": "2"
+}

@@ -1,0 +1,5 @@
+{
+  "script": "bin/collector.js",
+  "name": "collector",
+  "instances": "2"
+}

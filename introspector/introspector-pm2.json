@@ -1,0 +1,4 @@
+{
+  "script": "bin/introspector.js",
+  "name": "introspector"
+}

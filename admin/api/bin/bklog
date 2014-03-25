@@ -1,0 +1,179 @@
+#!/usr/bin/env node
+
+var program     = require('commander')
+  , moment      = require('moment')
+  , Log         = require('../lib/models/logentry')
+  , Logger      = require('../lib/logger')
+  , logger      = new Logger()
+  , _           = require('underscore')
+  , util        = require('util')
+  , path        = require('path')
+
+//moment configuration
+moment.calendar = {
+    lastDay : '[Yesterday] HH:mm:ss',
+    sameDay : 'HH:mm:ss',
+    nextDay : '[Tomorrow] HH:mm:ss',
+    lastWeek : '[Last] dddd HH:mm:ss',
+    nextWeek : '[Next] dddd HH:mm:ss',
+    sameElse : 'dddd MM/dd/YY HH:mm:ss'
+}
+
+var levels = ["trace","debug","log","info","warn","error","fatal"];
+
+program
+  .version('0.1.0')
+  .option('-n, --lines [number]', 'Only output the last n lines')
+  .option('-f, --follow', 'Output appended lines as their arrive')
+  .option('-l, --level [level]', 'Filter lines by level, either as a regexp, or a comma separated list')
+  .option('-m, --min [level]', 'Minimal level threshold, with ' + levels.join(' < '))
+  .option('-u, --user [user]', 'Output only what happened for user')
+  .option('-c, --no-color', 'Output without colors')
+  .option('-d, --rawdate', 'Output raw date, rather than humanized ones')
+  .option('-p, --fullpath', 'Output full file path, rather than humanized ones')
+  .parse(process.argv)
+
+if(program.level) {
+  program.level = new RegExp(program.level.split(',').join('|'), 'i')
+}
+
+if(program.min) {
+  var idxLevel = levels.indexOf(program.min)
+
+  if(idxLevel<0) {
+    if(program.color) {
+      require('colors')
+      console.log('Error, option -m/--min contains an invalid level: '.bold.red , program.min)
+    } else {
+      console.log('Error, option -m/--min contains an invalid level: ' , program.min)
+    }
+    console.log('Valid levels are : '+ levels.join())
+    return process.exit(1)
+  }
+
+  var selectedLevels = levels.slice(idxLevel);
+
+  if(program.level) {
+    selectedLevels = selectedLevels.filter(function(level) { return program.level.test(level) })
+  }
+
+  program.level = new RegExp(selectedLevels.join('|'), 'i')
+
+} 
+
+var colorizeLevel = function nocolor (level) {return level}
+
+if(program.color) {
+  require('colors')
+  colorizeLevel = function colorize (level) {
+    if (level.match(/FATAL/))
+      return level.bold.inverse.red
+    else if (level.match(/ERROR/))
+      return level.bold.red
+    else if (level.match(/WARN/))
+      return level.bold.yellow
+    else if (level.match(/INFO/))
+      return level.bold.blue
+    else if (level.match(/DEBUG/)) //seems not available right now
+      return level.green
+    else if (level.match(/TRACE/)) //seems not available right now
+      return level.grey
+    else
+      return level
+  }
+}
+
+var formatPath = function keepFullPath(file) {return file}
+
+if(!program.fullpath) {
+  formatPath = function humanizePath(file) {return path.basename(file)}
+}
+
+function inlineData(data) {
+  if (! Array.isArray(data))
+    return util.inspect(log.data, true, null, program.color).replace(/\n/g, '')
+
+  return data.reduce(function(a,b) {
+    var c=a, d=b;
+    if( typeof a == "object")
+      c =  util.inspect(a, true, null, program.color).replace(/\n/g, '')
+
+    if( typeof b == "object")
+      d =  util.inspect(b, true, null, program.color).replace(/\n/g, '')        
+    
+    return ''+c+' '+d;
+  })
+}
+
+// Utility function to pad levels
+var padLevel = (function() {
+  // Compute padding width based on levels
+  var levelPadding = _.reduce(logger.levels, function (memo, level) {
+    return Math.max(memo, level.length)
+  }, 0)
+
+  return _.memoize(function(level) {
+    var padding = levelPadding - level.length
+    if (!padding) {
+      return level
+    }
+    return level + (new Array(padding+1).join(' '))
+  })
+})()
+
+var consoleLog = function (log, options) {
+  options = options || {}
+  var dash = '-'
+    , file = formatPath(log.file)
+    , user = log.user ? '<'+log.user+'>' : ''
+    , timestamp = program.rawdate ?
+        log._id.getTimestamp().toLocaleString() :
+        moment(log._id.getTimestamp()).calendar()
+    , level = colorizeLevel( padLevel(log.level.toUpperCase()))
+    , body = inlineData(log.data)
+    
+
+  if(options.nocolor) {
+    console.log(timestamp, level, user, body, dash, file)
+  } else {
+    console.log(timestamp.blue, level, user, body, dash.yellow, file.cyan)
+  }
+
+}
+
+var lastDate
+  , consoleOpts = {
+    nocolor: !program.color
+  }
+
+function query () {
+  var q = Log.find().lean()
+  if (lastDate)      { q.gt('_id', lastDate) }
+  if (program.level) { q.regex('level', program.level) }
+  if (program.lines) { q.limit(program.lines) }
+  if (program.user)  { q.where('user').equals(program.user) }
+  return q.sort({ _id: -1 })
+}
+
+(function doQuery () {
+  var q = query()
+
+  if(program.lines) { delete program.lines }
+
+  q.exec(function (err, docs) {
+    if(err) {
+      console.log(err)
+      return program.follow ? null : process.exit()
+    }
+    if(docs.length) {
+      lastDate = docs[0]._id
+      docs.reverse().forEach(function (log) {
+        consoleLog(log, consoleOpts)
+      })
+    }
+    if(!program.follow) {
+      return process.exit()
+    }
+    setTimeout(doQuery, 500)
+  })
+})()

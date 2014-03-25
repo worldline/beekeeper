@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <link href="styles/style.css" rel="stylesheet" type="text/css">
+  <script data-main="scripts/main" src="scripts/vendor/requirejs/require.js"></script>
+  <title>Beekeeper</title>
+</head>
+
+<body>
+  <div class="mainContainer">
+  </div>
+  <div id="loginPromptPlaceHolder" style="display:none;">
+    <form>
+      <input type="text" name="username" placeholder="login"/>
+      <input type="password" name="password" placeholder="password" />
+      <input type="submit" value="ok" />
+    </form>
+  </div>
+
+  <!-- Pre-populate a single modal popup so we only have to fill the blanks when we need to show it -->
+  <div class="modal fade" style="display:none;" id="bkModal" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- update password modal -->
+  <div class="modal fade" style="display:none;" id="bkUpdatePasswordModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Update password</h4>
+        </div>
+        <div class="modal-body">
+          <input type="password" placeholder="Old password" name="oldpassword">
+          <input type="password" placeholder="New password" name="newpassword">
+          <input type="password" placeholder="Confirm password" name="confirmpassword">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="close btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Update</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+</body>
+</html>

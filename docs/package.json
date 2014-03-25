@@ -1,0 +1,10 @@
+{
+  "name": "beekeeper-docs",
+  "scripts": {
+    "build": "./build.sh",
+    "clean": "./clean.sh"
+  },
+  "dependencies": {
+    "marked": "~0.2.8"
+  }
+}

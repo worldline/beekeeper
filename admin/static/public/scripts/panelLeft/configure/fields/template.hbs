@@ -1,0 +1,32 @@
+<ol class="properties">
+  {{#with formulas}}
+  	{{#each fields}}
+      <li>
+        {{#unless properties.hidden.name}}
+          <input type="text" class="name" name="{{name}}" value="{{properties.default.name}}" title="Name of the label for this element"/><br />
+        {{/unless}}
+
+        {{#if properties.modifiers}}
+          <select name="type">
+            {{#each properties.modifiers}}
+              <option value="{{name}}" {{#if default}} selected {{/if}} >{{name}}</option>
+            {{/each}}
+          </select>
+        {{/if}}
+
+        {{#unless properties.hidden.refresh}}
+          <select name="refresh" title="Refresh interval of the widget">
+            {{#each refresh}}
+              <option value="{{value}}" {{#if default}} selected {{/if}} >{{name}}</option>
+            {{/each}}
+          </select>
+        {{/unless}}
+
+        {{#unless properties.hidden.period}}
+          <input type="text" name="width" value="{{properties.default.period}}" title="Period in seconds for which the data are computed" />
+        {{/unless}}
+
+      </li>
+    {{/each}}
+  {{/with}}
+</ol>

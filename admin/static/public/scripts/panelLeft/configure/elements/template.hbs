@@ -1,0 +1,8 @@
+{{#each elements}}
+  <div class="formula" data-name="{{el.name}}">
+    {{#if el.desc}}
+      <label class="description icon-info-sign">{{{el.desc}}}</label>
+    {{/if}}
+    <textarea class='tagged_text' placeholder="Write the {{el.name}} of the formula" name="{{el.name}}" />
+  </div>
+{{/each}}

@@ -1,0 +1,19 @@
+<div class="widget-head">
+  <p title="{{name}}" data-editable>{{name}}</p>
+  <div data-edit-widget class="button-div settings-button">
+    <div class="icon-cog glow-icon"></div>
+  </div>
+  <div class="button-div menu-button dropdown">
+  	<a class="dropdown-toggle icon-caret-down" data-toggle="dropdown" title="Widget Settings" href="#"></a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="widgetMenu-{{name}}">
+      <li><a tabindex="-1" href="#" data-rename-widget class="icon-pencil">Rename</a></li>
+      <li><a tabindex="-1" href="#" data-edit-widget class="icon-cog">Edit/Clone</a></li>
+      <li class="divider"></li>
+      <li><a tabindex="-1" href="#" data-delete-widget class="delete-button icon-remove">Delete</a></li>
+    </ul>
+  </div>
+</div>
+<div class="widget-content">
+  <div class="spinner"></div>
+  <div class="data-warning"></div>
+</div>

@@ -1,0 +1,18 @@
+{
+  "author": "Worldline",
+  "name": "beekeeper-evaluator",
+  "description": "Server receiving collectd data.",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "cube": "git://github.com/Marsup/cube.git#full-merge",
+    "cfg": "0.0.2"
+  },
+  "scripts": {
+    "start": "../node_modules/.bin/pm2 start evaluator-pm2.json",
+    "stop": "../node_modules/.bin/pm2 stop evaluator"
+  },
+  "engines": {
+    "node": "~0.10.23"
+  }
+}

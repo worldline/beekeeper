@@ -1,0 +1,12 @@
+{
+  "values": [0, 101.111],
+  "dstypes": ['counter', 'counter'],
+  "dsnames": ['highops', 'lowops'],
+  "time": 1351244799000,
+  "interval": 10,
+  "host": 'datagrid02',
+  "plugin": 'snmp',
+  "plugin_instance": '',
+  "type": 'fas_iscsi_usage',
+  "type_instance": ''
+}

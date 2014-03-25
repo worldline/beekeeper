@@ -1,0 +1,11 @@
+<div class="bg{{name}}"></div>
+{{#if children}}
+	<input type="checkbox" id="expand{{_id}}"/><label for="expand{{_id}}"></label>
+{{/if}}
+
+<input type="checkbox" id="{{_id}}" data-name="{{name}}" disabled="disabled"/><label for="{{_id}}"><span class="label">{{name}}</span>{{#if children}}<span class="legend">{{legend}}</span>{{/if}}</label>
+
+{{#if children}}
+	<ul>					
+	</ul>
+{{/if}}

@@ -1,0 +1,211 @@
+/* --------------
+Widgets layout
+---------------*/
+
+.animates () {
+  @min :0.97;
+  @max : 1.02;
+
+  @highlight : #ACF 0 0 8px;
+  @lesshighlight : #79C 0 0 0px;
+
+  0%  { .box-shadow(@lesshighlight);}
+  20% { .box-shadow(@highlight);}
+  40% { .box-shadow(@lesshighlight);}
+  60% { .box-shadow(@highlight);}
+  80% { .box-shadow(@lesshighlight);}
+}
+
+
+@-webkit-keyframes newWidget {.animates;}
+@-moz-keyframes newWidget {.animates;}
+@-ms-keyframes newWidget {.animates;}
+@-o-keyframes newWidget {.animates;}
+@keyframes newWidget {.animates;}
+
+
+.widget-container {
+  .widget {
+    background: fade(@bg-dark, 90%);
+
+    &.new {
+      @delay :2s;
+      @animation : newWidget;
+      .animation(@delay @animation);
+    }
+
+    &.dragged{
+      z-index:20;
+    }
+
+    &.icon-plus-sign::before{
+      font-size: 95px;
+      color: #BADA55;
+      padding: 12px 0 0 23px;
+      line-height: 120px;
+    }
+
+    border: 1px solid @border;
+    .box-shadow( 0px 0px 0px 1px rgba(0, 0, 0, 1));
+    position: absolute;
+
+    -moz-transition: 1s;
+    -webkit-transition: 1s;
+
+    cursor:default;
+
+    .widget-head {
+      color: rgba(255, 255, 255, 1);
+      background: rgba(255, 255, 255, 0.05);
+      width: 100%;
+      height: @widget-head-size;
+      overflow: hidden;
+      border-bottom: 1px solid @border;
+
+      p {
+        margin: 2px (@widget-head-size*2 + 4px) 2px 5px;
+        display: block;
+        cursor: move;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space: pre;
+      }
+
+      input {
+        background-color: rgba(255,255,255,0.1);
+        border: 1px solid @border;
+        color:inherit;
+        margin:0;
+        padding:0;
+      }
+
+      .button-div {
+        position: absolute;
+        top: 0;
+
+        padding: 1px 2px 1px 1px;
+        border-left: 1px solid @border;
+        .box-shadow(-1px 0px 0px 0px rgba(0, 0, 0, 1));
+
+        width: @widget-head-size - 2px;
+        height: @widget-head-size - 2px;
+        background-origin: content-box;
+        background-clip: content-box;
+
+        .value {
+          /* I use a mono font to avoid the digits to move when the number change */
+          font-family: 'Droid Sans Mono', sans-serif;
+        }
+
+        &:hover {
+          background-color: @color-hov;
+          cursor: pointer;
+        }
+      }
+
+      .settings-button {
+        right: @widget-head-size + 2px;
+        color: white;
+
+        div {
+          padding-left: 1px;
+        }
+      }
+
+      .menu-button {
+        right: 0;
+        .dropdown-toggle {
+          color: white;
+          padding-left: 2px;
+        }
+      }
+
+      .menu {
+        display: none;
+        position: absolute;
+        z-index: 2;
+        top: @widget-head-size + 1px;
+        right: 2px;
+        margin-top: 2px;
+        padding: 5px 10px;
+
+        background: fade(@bg-dark, 90%);
+        border-radius: 2px;
+        border: 1px solid @border;
+
+        li {
+          padding: 5px 0px;
+          list-style-type: none;
+
+          &:hover {
+            opacity: 0.5;
+          }
+
+          &:first-of-type {
+            padding-top: 0;
+          }
+          &:last-of-type {
+            padding-bottom: 0;
+          }
+
+          &:not(:last-of-type) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+    }
+
+    .widget-content {
+      width: 100%;
+      top: @widget-head-size;
+      bottom: 0px;
+      position: absolute;
+
+      & > * {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: @widget-padding / 2;
+      }
+
+      .data-warning {
+        width: 100%;
+        height: 100%;
+        display: none;
+        background: url('../png/warning.svg') center center no-repeat;
+      }
+    }
+
+    .value {
+        /* I use a mono font to avoid the digits to move when the number change */
+        font-family: 'Droid Sans Mono', sans-serif;
+    }
+  }
+}
+
+.spinner {
+  width: 100%;
+  height: 100%;
+  background: url('../png/spinner.svg') center center no-repeat;
+}
+
+.nvtooltip {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  border-width: 0;
+  border-radius: 5px;
+  padding: 10px !important;
+  .translate3d(0, 0, 0);
+
+  h3 {
+    background-color: transparent;
+    .border-radius(3px);
+    border-bottom: 0;
+    background-color: rgba(85, 85, 85, 0.75);
+  }
+
+  p {
+    background-color: transparent;
+  }
+}

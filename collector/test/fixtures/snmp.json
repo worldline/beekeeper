@@ -1,0 +1,12 @@
+[{
+  "values": [ 12 ],
+  "dstypes": [ "counter" ],
+  "dsnames": [ "score" ],
+  "time": 1347279053000,
+  "interval": 10,
+  "host": "l40077",
+  "plugin": "snmp",
+  "plugin_instance": "",
+  "type": "123.123.123.123:1234",
+  "type_instance": ""
+}]

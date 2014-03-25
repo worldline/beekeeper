@@ -1,0 +1,49 @@
+{
+  "author": "Worldline",
+  "name": "beekeeper",
+  "version": "1.0.0",
+  "scripts": {
+    "install": "cd admin; npm i; cd ../collector; npm i; cd ../evaluator; npm i; cd ../introspector; npm i",
+    "test": "cd admin && npm test && cd ../collector && npm test && cd ../evaluator && npm test && cd ../introspector && npm test",
+    "start": "cd collector; npm start; cd ../evaluator; npm start; cd ../admin; npm start; cd ../introspector; npm start",
+    "stop": "cd collector; npm stop; cd ../evaluator; npm stop; cd ../admin; npm stop; cd ../introspector; npm stop",
+    "restartall": "pm2 restart all",
+    "stopall": "pm2 stop all",
+    "list": "pm2 list",
+    "status": "pm2 list",
+    "clean": "pm2 flush",
+    "logs": "pm2 logs",
+    "bktrace": "admin/api/bin/bklog -f -n 50",
+    "bkdebug": "admin/api/bin/bklog -f -n 50 -m debug",
+    "bklog": "admin/api/bin/bklog -f -n 50 -m log",
+    "bkinfo": "admin/api/bin/bklog -f -n 50 -m info"
+  },
+  "dependencies": {
+    "pm2": "~0.6.10"
+  },
+  "engines": {
+    "node": "~0.10.23"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/worldline/beekeeper.git"
+  },
+  "license": "GPL-3.0",
+  "homepage": "http://worldline.github.io/beekeeper",
+  "bugs": {
+    "url": "https://github.com/worldline/beekeeper/issues"
+  },
+  "keywords": [
+    "realtime",
+    "graphing",
+    "cube"
+  ],
+  "contributors": [
+    "Romain Alvado <romain.alvado@atos.net>",
+    "Etienne Brodu <etienne.brodu@worldline.com>",
+    "Maxence Dalmais <maxence.dalmais@worldline.com>",
+    "Simon Lopez <simon.lopez@worldline.com>",
+    "Nicolas Morel <nicolas.morel@worldline.com>",
+    "Florian Traverse <florian.traverse@worldline.com"
+  ]
+}

@@ -1,0 +1,99 @@
+/* --------------
+Widget & Grid
+---------------*/
+
+@widget-unit: 120px;
+@widget-margin: 9px;
+@widget-head-size: 18px;
+@widget-padding: 4px;
+
+@max-widget-width: 10;
+@max-widget-height: 10;
+
+@columns: 7;
+@rows: 4;
+
+.grid-gradient(@bottom-color1, @bottom-color2, @bottom-color3, @bottom-color4, @right-color1, @right-color2, @right-color3, @right-color4) {
+  background: -moz-linear-gradient(bottom, @bottom-color1, @bottom-color2, @bottom-color3, @bottom-color4),
+              -moz-linear-gradient(right, @right-color1, @right-color2, @right-color3, @right-color4);
+  background: -webkit-linear-gradient(bottom, @bottom-color1, @bottom-color2, @bottom-color3, @bottom-color4),
+              -webkit-linear-gradient(right, @right-color1, @right-color2, @right-color3, @right-color4);
+  background: -o-linear-gradient(bottom, @bottom-color1, @bottom-color2, @bottom-color3, @bottom-color4),
+              -o-linear-gradient(right, @right-color1, @right-color2, @right-color3, @right-color4);
+  background: linear-gradient(bottom, @bottom-color1, @bottom-color2, @bottom-color3, @bottom-color4),
+              linear-gradient(right, @right-color1, @right-color2, @right-color3, @right-color4);
+}
+/*@media (max-width: n * @widget-unit + (n-1)* @widget-margin) and (min-width: ) {
+
+
+}*/
+
+.widget-container {
+
+    position: relative;
+    width: @widget-unit * @columns + @widget-margin * (@columns - 1);
+    height: @widget-unit * @rows + @widget-margin * (@rows - 1);
+    margin: auto;
+    margin-top: 1em;
+    padding: 0;
+
+    &.grid {
+        @bg-size: @widget-unit + @widget-margin;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        .grid-gradient(transparent, transparent (@bg-size - 1px), rgba(255, 255, 255, 0.1) (@bg-size - 1px), rgba(255, 255, 255, 0.1) @bg-size,
+                       transparent, transparent (@bg-size - 1.1pt), rgba(255, 255, 255, 0.1) (@bg-size - 1.1pt), rgba(255, 255, 255, 0.1) @bg-size);
+        background-size: @bg-size @bg-size;
+        background-position: -@widget-margin/2 -@widget-margin/2;
+    }
+
+
+
+    .loopWidth (@index) when (@index > 0) {
+        .w@{index} { .width(@index); }
+        .loopWidth(@index - 1);
+    }
+
+    .loopWidth (0) {}
+
+    .loopHeight (@index) when (@index > 0) {
+        .h@{index} { .height(@index); }
+        .loopHeight(@index - 1);
+    }
+
+    .loopHeight (0) {}
+
+    .loopTop (@index) when (@index > 0) {
+        .t@{index} { .top(@index); }
+        .loopTop(@index - 1);
+    }
+
+    .loopTop (0) {}
+
+    .loopLeft (@index) when (@index > 0) {
+        .l@{index} { .left(@index); }
+        .loopLeft(@index - 1);
+    }
+
+    .loopLeft (0) {}
+
+    .width (@size) {
+        width: (@widget-unit * @size) + (@widget-margin * (@size - 1));
+    }
+
+    .height (@size) {
+        height: (@widget-unit * @size) + (@widget-margin * (@size - 1));
+    }
+
+    .top (@row) {
+        top: (@widget-unit + @widget-margin) * (@row - 1) - 1;
+    }
+
+    .left (@column) {
+        left: (@widget-unit + @widget-margin) * (@column - 1) - 1;
+    }
+
+    .loopWidth (@max-widget-width);
+    .loopHeight (@max-widget-height);
+    .loopTop (@rows);
+    .loopLeft (@columns);
+}

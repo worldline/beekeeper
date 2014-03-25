@@ -1,0 +1,58 @@
+<div class="top">
+  <div class="params mainparams">
+  	<select class="widgetSelect" title="Type of the widget">
+  		{{#each widgets}}
+  			<option name="{{name}}" {{#if default}}selected{{/if}}>{{name}}</option>
+  		{{/each}}
+  	</select>
+    <span class="dimensions">
+        <select name="height" title="Widget Height">
+          <option value="1" >1</option>
+          <option value="2" >2</option>
+          <option value="3" >3</option>
+          <option value="4" >4</option>
+        </select>
+        ×
+        <select name="width" title="Widget Width">
+            <option value="1" >1</option>
+            <option value="2" >2</option>
+            <option value="3" >3</option>
+            <option value="4" >4</option>
+            <option value="5" >5</option>
+            <option value="6" >6</option>
+            <option value="7" >7</option>
+        </select>
+    </span>
+  </div>
+</div>
+
+<div class="information">
+  <div class="preview">
+    <input class="widgetTitle" type="text" name="title" placeHolder="Widget Title" title="Please insert your widget title" value="{{widget.name}}"/>
+    {{#each widgets}}
+      <img src="/scripts/widgets/{{name}}/preview.png" class="{{name}}" />
+    {{/each}}
+  </div>
+  <div class="description icon-info-sign"></div>
+</div>
+
+<div class="fields">
+</div>
+
+<div class="formulas">
+</div>
+
+<div class="buttonBar">
+	<input type="button" value="Create" class="create button"/>
+
+{{#if widget }}
+  {{#if widget._id}}
+    <input type="hidden" value={{widget._id}} name="widgetID">
+    <input type="hidden" value={{widget.position_x}} name="position_x">
+    <input type="hidden" value={{widget.position_y}} name="position_y">
+    <input type="button" value="Edit" class="edit button"/>
+  {{/if}}
+{{/if}}
+    <input type="button" value="Cancel" class="cancel button" />
+
+</div>

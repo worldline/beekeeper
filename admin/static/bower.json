@@ -1,0 +1,25 @@
+{
+  "name": "Beekeeper",
+  "version": "0.0.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "3.3.11",
+    "jquery": "~2.0.3",
+    "jquery-caret": "*",
+    "backbone": "~1.1.0",
+    "requirejs": "~2.1.9",
+    "nvd3": "1.1.14-beta",
+    "bootstrap": "~3.0.3",
+    "moment": "~2.4.0",
+    "handlebars.js": "~1.0.12",
+    "requirejs-text": "~2.0.10",
+    "lodash": "~2.4.1",
+    "require-less": "~0.1.1"
+  }
+}
