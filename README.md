@@ -18,7 +18,7 @@ It also includes a cluster-wide logging system, so you can debug easily what hap
 
 # Install & run Beekeeper
 
-Check you fulfill the [Prerequisites](/worldline/beekeeper/blob/master/docs/setup.md#prerequisites), then simply clone the repository and install:
+Check you fulfill the [Prerequisites](docs/setup.md#prerequisites), then simply clone the repository and install:
 
 ```
 $> git clone https://github.com/worldline/beekeeper.git
@@ -36,7 +36,7 @@ Collector is responsible for getting the raw JSON data you send to it into Mongo
 
 It's an HTTP server and it puts any JSON into an event you can use in Beekeeper.
 
-For raw server metrics, we usually use [Collectd and SNMP](/worldline/beekeeper/blob/master/docs/setup.md#collectd) together to put data into the collector.
+For raw server metrics, we usually use [Collectd and SNMP](/docs/setup.md#collectd) together to put data into the collector.
 
 Because raw data may not be simple to request, or maybe, because you use different sources to provide the same kind of data (say raw Collectd data and SNMP through Collectd data, providing data with a different name and different units, for the same purpose), it also provides ways to remap data before storing it.
 
@@ -64,6 +64,6 @@ You can scale these parts independently too !
 
 # Setup & Documentation
 
-While documentation is not complete yet, most of what is available is [in this file](/worldline/beekeeper/blob/master/docs/setup.md)
+While documentation is not complete yet, most of what is available is [in this file](/docs/setup.md)
 
 
