@@ -11,7 +11,8 @@ Beekeeper doesn't really care about what your data is, and takes full advantages
 
 ![](http://worldline.github.io/beekeeper/images/sample1.png)
 
-Beekeeper is based on [Cube](http://square.github.io/cube/) and adds a scalable collecting system, user dashboards with different kind of realtime widgets, some extended formula syntaxes, a formula completion system, and datacenter awareness. We also work with notably Square and Infochimp in order to improve Cube by itself, but we maintain our [own cube fork](https://github.com/Marsup/cube/tree/full-merge) to have the full featureset we need for Beekeeper meanwhile.
+Beekeeper is based on [Cube](http://square.github.io/cube/) and adds a scalable collecting system, user dashboards with different kind of realtime widgets, some extended formula syntaxes, a formula completion system, and hierarchy (e.g. zone>datacenter>servers>etc.) awareness.
+We also work with notably Square and Infochimp in order to improve Cube by itself, but we maintain our [own cube fork](https://github.com/Marsup/cube/tree/full-merge) to have the full featureset we need for Beekeeper meanwhile.
 
 It also includes a cluster-wide logging system, so you can debug easily what happens if you want to understand what happens during runtime.
 
