@@ -3,12 +3,11 @@
 #  Utility functions.
 #
 
-
-#  Returns the configured Node version - defaults to 0.8.9.
+#  Returns the configured Node version - defaults to 0.10.26.
 function get_node_version() {
    marker="$OPENSHIFT_REPO_DIR/.openshift/markers/NODEJS_VERSION"
    nodejs_ver=$(egrep -v "^\s*#.*" "$marker" | egrep -v "^\s*$" | tail -1)
-   echo "${nodejs_ver:-"0.8.9"}"
+   echo "${nodejs_ver:-"0.10.26"}"
 
 }  #  End of function  get_node_version.
 
@@ -20,19 +19,12 @@ function get_node_install_dir() {
 }  #  End of function  get_node_install_dir.
 
 
-#  Returns the path to the npm binary.
-function get_npm_bin_path() {
+#  Returns the path to the node and npm binaries.
+function get_bin_path() {
    ver=${1:-"$(get_node_version)"}
    echo "$(get_node_install_dir)/node-v$ver-linux-x64/bin"
 
-}  #  End of function  get_npm_bin_path.
-
-
-#  Returns the path to the node binary.
-function get_node_bin_path() {
-   echo "$(get_npm_bin_path)"
-
-}  #  End of function  get_node_bin_path.
+}  #  End of function  get_bin_path.
 
 
 #  Returns the temporary directory we use for processing.
@@ -54,8 +46,7 @@ function _install_nodejs() {
    ver=${1:-"$(get_node_version)"}
 
    # Sample download links:
-   #    http://nodejs.org/dist/v0.8.9/node-v0.8.9-linux-x64.tar.gz
-   #    http://nodejs.org/dist/v0.9.1/node-v0.9.1-linux-x64.tar.gz
+   #    http://nodejs.org/dist/v0.10.26/node-v0.10.26-linux-x64.tar.gz
    zfile="node-v${ver}-linux-x64.tar.gz"
    zlink="http://nodejs.org/dist/v${ver}/${zfile}"
 
@@ -113,7 +104,7 @@ function ensure_node_is_installed() {
    #         so use w/ caution (do once).
    #
 
-   if [ -d  "$(get_node_bin_path)" ]; then
+   if [ -d  "$(get_bin_path)" ]; then
       echo "  - Node.js version $ver is already installed"
    else
       _install_nodejs
@@ -127,21 +118,49 @@ function ensure_node_is_installed() {
 #  Sets up PATH to include the custom node version binaries.
 function setup_path_for_custom_node_version() {
    #  Get node binary path.
-   node_bin_path=$(get_node_bin_path)
+   bin_path=$(get_bin_path)
 
-   echo $PATH | grep $node_bin_path > /dev/null 2> /dev/null
+   echo $PATH | grep $bin_path > /dev/null 2> /dev/null
    if [ $? -eq 1 ]
    then
      #  Add the node binary path to the PATH.
-     export PATH="$node_bin_path:${PATH}"
+     export PATH="$bin_path:${PATH}"
 
      if [ -n "$_SHOW_SETUP_PATH_MESSAGES" ]; then
         echo "  - PATH set to include custom node version ($ver) from"
-        echo "       $node_bin_path "
+        echo "       $bin_path "
         echo "    PATH = $PATH"
      fi
    fi
 }  #  End of function  setup_path_for_custom_node_version.
+
+export NODE_ENV=openshift
+export PM2_BIND_ADDR=$OPENSHIFT_NODEJS_IP
+
+function _cleanaliases() {
+  unset node
+  unset npm
+  unset pm2
+  unset _cleanaliases
+  alias pm2="HOME=$OPENSHIFT_DATA_DIR $OPENSHIFT_REPO_DIR/node_modules/.bin/pm2"
+  ensure_node_is_installed
+  setup_path_for_custom_node_version
+}
+
+function node() {
+  _cleanaliases
+  $(get_bin_path)/node $@
+}
+
+function npm() {
+  _cleanaliases
+  $(get_bin_path)/npm $@
+}
+
+function pm2() {
+  _cleanaliases
+  HOME=$OPENSHIFT_DATA_DIR $OPENSHIFT_REPO_DIR/node_modules/.bin/pm2 $@
+}
 
 #
 # EOF
