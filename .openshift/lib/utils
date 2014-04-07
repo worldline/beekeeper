@@ -136,30 +136,26 @@ function setup_path_for_custom_node_version() {
 
 export NODE_ENV=openshift
 export PM2_BIND_ADDR=$OPENSHIFT_NODEJS_IP
+export PM2_HOME=$OPENSHIFT_DATA_DIR
 
-function _cleanaliases() {
-  unset node
-  unset npm
-  unset pm2
-  unset _cleanaliases
-  alias pm2="HOME=$OPENSHIFT_DATA_DIR $OPENSHIFT_REPO_DIR/node_modules/.bin/pm2"
+function _checkNode() {
   ensure_node_is_installed
   setup_path_for_custom_node_version
 }
 
 function node() {
-  _cleanaliases
+  _checkNode
   $(get_bin_path)/node $@
 }
 
 function npm() {
-  _cleanaliases
+  _checkNode
   $(get_bin_path)/npm $@
 }
 
 function pm2() {
-  _cleanaliases
-  HOME=$OPENSHIFT_DATA_DIR $OPENSHIFT_REPO_DIR/node_modules/.bin/pm2 $@
+  _checkNode
+  $OPENSHIFT_REPO_DIR/node_modules/.bin/pm2 $@
 }
 
 #

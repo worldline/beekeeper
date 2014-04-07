@@ -19,7 +19,7 @@
     "bkinfo": "admin/api/bin/bklog -f -n 50 -m info"
   },
   "dependencies": {
-    "pm2": "~0.6.10"
+    "pm2": "git://github.com/simonlopez/pm2.git#master"
   },
   "engines": {
     "node": "~0.10.23"
