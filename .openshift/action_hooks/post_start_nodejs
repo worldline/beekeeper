@@ -13,29 +13,10 @@
 # Application start and stop is subject to different timeouts
 # throughout the system.
 
-#  Source utility functions.
-source "$OPENSHIFT_REPO_DIR/.openshift/lib/utils"
-
-#  Get the node version.
-ver=$(get_node_version)
-
-
-#  Set URI to the custom sample /env route.
-app_uri="http://$OPENSHIFT_GEAR_DNS/env"
-
-#  Wait a bit to give the server time to come up.
-sleep 5
-
-#  Check if the app_uri is available - user code could have removed the
-#  one in the sample -- we just print this for sanity testing.
-zcode=$(curl --write-out %{http_code} -s -o /dev/null "$app_uri")
-
-if [ "$zcode" -eq 200 ]; then
-   echo ""
-   echo "  - Using Node.js version $ver, checking app URI ... "
-   echo "  - test URI = $app_uri"
-   echo "  - Version from test URI = $(curl -s $app_uri | grep 'Version')"
-   echo ""
+if [ -f "$OPENSHIFT_REPO_DIR/.openshift/lib/utils" ]; then
+   source "$OPENSHIFT_REPO_DIR/.openshift/lib/utils"
+   ensure_node_is_installed
+   setup_path_for_custom_node_version
 fi
 
 password=$OPENSHIFT_MONGODB_DB_PASSWORD
@@ -50,6 +31,5 @@ echo "use admin
      "  | mongo --host $OPENSHIFT_MONGODB_DB_HOST --port $OPENSHIFT_MONGODB_DB_PORT -u $OPENSHIFT_MONGODB_DB_USERNAME -p $OPENSHIFT_MONGODB_DB_PASSWORD ${OPENSHIFT_APP_NAME}
 
 ## init database if needed
-export NODE_ENV=openshift
 cd "${OPENSHIFT_REPO_DIR}/admin/api/init"
 node initDashboards.js
