@@ -3,6 +3,8 @@
 #  Utility functions.
 #
 
+export HOME=$OPENSHIFT_DATA_DIR
+
 #  Returns the configured Node version - defaults to 0.10.26.
 function get_node_version() {
   marker="$OPENSHIFT_REPO_DIR/.openshift/markers/NODEJS_VERSION"
