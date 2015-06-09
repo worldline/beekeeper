@@ -35,4 +35,4 @@ fi
 
 ## init database if needed
 cd "${OPENSHIFT_REPO_DIR}/admin/api/init"
-node initDashboards.js
+NODE_ENV=openshift node initDashboards.js
