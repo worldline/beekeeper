@@ -26,8 +26,8 @@ cfg.set('evaluator', {
 });
 
 cfg.set('cube', {
-  "mongo-host": process.env.OPENSHIFT_MONGODB_DB_HOST || "127.0.0.1",
-  "mongo-port": +(process.env.OPENSHIFT_MONGODB_DB_PORT || 27017),
+  "mongo-host": process.env.OPENSHIFT_MONGODB_DB_HOST || process.env.OPENSHIFT_MONGODB_IP || "127.0.0.1",
+  "mongo-port": +(process.env.OPENSHIFT_MONGODB_DB_PORT || process.env.OPENSHIFT_MONGODB_PORT || 27017),
   "mongo-database": process.env.OPENSHIFT_APP_NAME || "cube",
   "mongo-username": process.env.OPENSHIFT_MONGODB_DB_USERNAME,
   "mongo-password": process.env.OPENSHIFT_MONGODB_DB_PASSWORD,
@@ -187,8 +187,8 @@ cfg.env('openshift', function() {
   cfg.get('api').host = process.env.OPENSHIFT_NODEJS_IP;
   cfg.get('api').port = 17000;
   ['hierarchy', 'dashboards', 'security', 'logs', 'errors'].forEach(function (domain) {
-    cfg.get(domain).db.host = process.env.OPENSHIFT_MONGODB_DB_HOST;
-    cfg.get(domain).db.port = +process.env.OPENSHIFT_MONGODB_DB_PORT;
+    cfg.get(domain).db.host = process.env.OPENSHIFT_MONGODB_DB_HOST || process.env.OPENSHIFT_MONGODB_IP;
+    cfg.get(domain).db.port = +(process.env.OPENSHIFT_MONGODB_DB_PORT || process.env.OPENSHIFT_MONGODB_PORT);
     cfg.get(domain).db.options.user = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
     cfg.get(domain).db.options.pass = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
     cfg.get(domain).db.database = process.env.OPENSHIFT_APP_NAME;

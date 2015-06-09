@@ -10,8 +10,8 @@ cfg.set('mongo-target-database', 'cube');
 
 // Specific configuration per environment
 cfg.env('openshift', function() {
-  cfg.set('mongo-host', process.env.OPENSHIFT_MONGODB_DB_HOST);
-  cfg.set('mongo-port', +process.env.OPENSHIFT_MONGODB_DB_PORT);
+  cfg.set('mongo-host', process.env.OPENSHIFT_MONGODB_DB_HOST || process.env.OPENSHIFT_MONGODB_IP);
+  cfg.set('mongo-port', +process.env.OPENSHIFT_MONGODB_DB_PORT || process.env.OPENSHIFT_MONGODB_PORT);
   cfg.set('mongo-username', process.env.OPENSHIFT_MONGODB_DB_USERNAME);
   cfg.set('mongo-password', process.env.OPENSHIFT_MONGODB_DB_PASSWORD);
   cfg.set('mongo-database', process.env.OPENSHIFT_APP_NAME + '-events');

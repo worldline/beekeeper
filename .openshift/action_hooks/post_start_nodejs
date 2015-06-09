@@ -19,8 +19,10 @@ if [ -f "$OPENSHIFT_REPO_DIR/.openshift/lib/utils" ]; then
    setup_path_for_custom_node_version
 fi
 
-password=$OPENSHIFT_MONGODB_DB_PASSWORD
-echo "use admin
+if [ "x$OPENSHIFT_MONGODB_DB_PASSWORD" != "x" ]
+then
+  password=$OPENSHIFT_MONGODB_DB_PASSWORD
+  echo "use admin
       db.auth(\"admin\", \"${password}\")
       db.system.users.find()
       use ${OPENSHIFT_APP_NAME}-events
@@ -29,6 +31,7 @@ echo "use admin
       db.addUser(\"admin\", \"${password}\")
       exit
      "  | mongo --host $OPENSHIFT_MONGODB_DB_HOST --port $OPENSHIFT_MONGODB_DB_PORT -u $OPENSHIFT_MONGODB_DB_USERNAME -p $OPENSHIFT_MONGODB_DB_PASSWORD ${OPENSHIFT_APP_NAME}
+fi
 
 ## init database if needed
 cd "${OPENSHIFT_REPO_DIR}/admin/api/init"
