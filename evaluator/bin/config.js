@@ -45,7 +45,7 @@ cfg.env('test', function() {
 
 cfg.env('openshift', function() {
   var mongodb = cfg.get('mongodb');
-  mongodb['mongo-url'] = process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME;
+  mongodb['mongo-url'] = (process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGODB_URL) + process.env.OPENSHIFT_APP_NAME;
   mongodb['mongo-server-options'].poolSize = 4;
 
   cfg.set('http-host', process.env.OPENSHIFT_NODEJS_IP);
